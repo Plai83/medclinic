@@ -2,41 +2,46 @@ import clients.*;
 import clients.imlp.*;
 import staff.Doctor;
 import staff.Nurse;
+import staff.Staff;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class VeterinaryClinic {
 
     private List<Animal> listСlients = new ArrayList<>();
+    private List<Staff> listStaff = new ArrayList<>();
     private List<Doctor> listDoc = new ArrayList<>();
     private List<Nurse> listNurse = new ArrayList<>();
+
     String address;
     String openingHours;
 
     public VeterinaryClinic() {
         address = "Сенная площадь, 2, Санкт-Петербург";
         openingHours = "Будни 9:00 - 21:00 / Выходные не работает";
-        clientsClinics();
+        ClientsClinics();
         StaffClinics();
         clinicWork();
     }
 
     public void StaffClinics() {
-        Doctor bob = new Doctor("Боб", LocalDate.now(), "Хирургия");
-        addEmployeeDoc(bob);
-        Doctor haus = new Doctor("Хаус", LocalDate.now(), "Диагност");
-        addEmployeeDoc(haus);
-        Nurse dahsa = new Nurse("Даша", LocalDate.now(), "Хирургия");
-        addEmployeeNurse(dahsa);
-        Nurse alisa = new Nurse("Алиса", LocalDate.now(), "Диагностическое отделение");
-        addEmployeeNurse(alisa);
+        Doctor bob = new Doctor("Боб", LocalDate.now(), "Хирургия", "Доктор");
+        addStaff(bob);
+        Doctor haus = new Doctor("Хаус", LocalDate.now(), "Диагност", "Доктор");
+        addStaff(haus);
+        Nurse dahsa = new Nurse("Даша", LocalDate.now(), "Хирургия", "Медсестра");
+        addStaff(dahsa);
+        Nurse alisa = new Nurse("Алиса", LocalDate.now(), "Диагностическое отделение", "Медсестра");
+        addStaff(alisa);
+
+        addEmployeeDoc();
+        addEmployeeNurse();
 
     }
 
-    public void clientsClinics() {
+    public void ClientsClinics() {
         Animal rada = new Dog("Рада", 7, LocalDate.now(), new Owner());
         addClients(rada);
         Animal kaa = new Snake("Каа", 12, LocalDate.now(), new Owner());
@@ -70,26 +75,67 @@ public class VeterinaryClinic {
         clientsWalking();
         clientsFloating();
 
+        System.out.println(listStaff);
+        System.out.println(listDoc);
+        System.out.println(listNurse);
+        dismStaff("Хаус");
+        System.out.println(listStaff);
+        System.out.println(listDoc);
+        System.out.println(listNurse);
+
     }
 
-    private void addEmployeeDoc(Doctor doc) {
+
+    public void addStaff(Staff staff) {
+        // Добавление персонала
+        listStaff.add(staff);
+    }
+
+    private void addEmployeeDoc() {
         // Добавление работника в список докторов
-        listDoc.add(doc);
+        for (Staff staff : listStaff) {
+            if (staff instanceof Doctor) {
+                listDoc.add((Doctor) staff);
+            }
+        }
     }
 
-    private void addEmployeeNurse(Nurse nurse) {
+    private void addEmployeeNurse() {
         // Добавление работника в список медсестер
-        listNurse.add(nurse);
+        for (Staff staff : listStaff) {
+            if (staff instanceof Nurse) {
+                listNurse.add((Nurse) staff);
+            }
+        }
     }
 
     public void getAllStaff() {
         // Вывод списка персонала
-        System.out.println(listDoc);
-        System.out.println(listNurse);
+        System.out.println(listStaff);
+    }
+
+    public void dismStaff(String name) {
+        // Увольнение работника
+        boolean flag = true;
+        for (int i = 0; i < listStaff.size(); i++){
+            if(name.equals(listStaff.get(i).getName())) {
+                System.out.printf("Работник %s уволен\n", listStaff.get(i).getName());
+                listStaff.remove(listStaff.get(i));
+                flag = false;
+                listDoc.clear();
+                listNurse.clear();
+                addEmployeeDoc();
+                addEmployeeNurse();
+                break;
+            }
+        }
+        if (flag) {
+            System.out.printf("Такого работника %s нет в поликлинике\n", name);
+        }
     }
 
 
-    private void addClients(Animal animal) {
+    public void addClients(Animal animal) {
         // Добавление клиента в список пациентов
         listСlients.add(animal);
     }
@@ -134,6 +180,7 @@ public class VeterinaryClinic {
                 System.out.printf("Пациент %s выписан\n", listСlients.get(i).getName());
                 listСlients.remove(listСlients.get(i));
                 flag = false;
+                break;
             }
         }
         if (flag) {

@@ -3,8 +3,8 @@ package staff;
 import java.time.LocalDate;
 
 public class Doctor extends Staff{
-    public Doctor(String name, LocalDate age, String speciality) {
-        super(name, age, speciality);
+    public Doctor(String name, LocalDate age, String speciality ,String jobTitle) {
+        super(name, age, speciality, jobTitle);
     }
 
     public void therapy (String name) {

@@ -7,11 +7,13 @@ public class Staff {
     protected String name;
     protected LocalDate age;
     protected String speciality;
+    protected String jobTitle;
 
-    public Staff(String name, LocalDate age, String speciality) {
+    public Staff(String name, LocalDate age, String speciality, String jobTitle) {
         this.name = name;
         this.age = age;
         this.speciality = speciality;
+        this.jobTitle = jobTitle;
     }
 
     public String getName() {
@@ -22,6 +24,8 @@ public class Staff {
     public String toString() {
         return "name='" + name + '\'' +
                 ", age=" + age +
-                ", speciality='" + speciality;
+                ", speciality='" + speciality +
+                ", jobTitle='" + jobTitle;
     }
+
 }
